@@ -2,8 +2,8 @@ import Chart from 'chart.js/auto';
 import { createClient } from '@supabase/supabase-js';
 
 // Supabase Configuration
-const supabaseUrl = 'https://rxdtserurpowfuefiyep.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ4ZHRzZXJ1cnBvd2Z1ZWZpeWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1Njk1NzcsImV4cCI6MjA5MjE0NTU3N30.1HPu3xZ3pt_VWPmm2T9Jt779nLch0UrPu0SOiPvCt30';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Base Data
