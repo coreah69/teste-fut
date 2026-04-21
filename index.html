@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FutAnalyze - Gestão de Entradas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/src/style.css">
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <i class="fa-solid fa-futbol logo-icon"></i>
+          <h1>FutAnalyze</h1>
+        </div>
+        <nav class="sidebar-nav">
+          <button class="nav-btn active" data-target="entradas">
+            <i class="fa-solid fa-list-check"></i> Entradas
+          </button>
+          <button class="nav-btn" data-target="dashboard">
+            <i class="fa-solid fa-chart-pie"></i> Dashboard
+          </button>
+          <button class="nav-btn" data-target="historico">
+            <i class="fa-solid fa-list-ol"></i> Histórico Geral
+          </button>
+          <button class="nav-btn" data-target="analise">
+            <i class="fa-solid fa-magnifying-glass-chart"></i> Análise
+          </button>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- View: Entradas -->
+        <section id="entradas" class="view active">
+          <div class="header-section">
+            <h2>Gestão de Entradas</h2>
+            <p>Registre e gerencie suas apostas esportivas.</p>
+          </div>
+
+          <div class="card form-card">
+            <div class="collapsible-header collapsed" id="toggleFormBtn">
+              <h3>Nova Entrada</h3>
+              <i class="fa-solid fa-chevron-down arrow-icon"></i>
+            </div>
+            <div class="collapsible-content collapsed" id="formContainer">
+              <form id="entradaForm">
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="data">Data</label>
+                  <input type="date" id="data" required>
+                </div>
+                <div class="form-group">
+                  <label for="liga">Liga</label>
+                  <select id="liga" required>
+                    <option value="">Selecione uma liga</option>
+                    <!-- Options populated via JS -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="jogo">Jogo</label>
+                  <input type="text" id="jogo" placeholder="Ex: Time A vs Time B" required>
+                </div>
+                <div class="form-group">
+                  <label for="mercado">Mercado</label>
+                  <select id="mercado" required>
+                    <option value="">Selecione o mercado</option>
+                    <!-- Options populated via JS -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="linha">Linha</label>
+                  <select id="linha" required>
+                    <option value="">Selecione a linha</option>
+                    <!-- Options populated via JS -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="resultado">Resultado</label>
+                  <select id="resultado" required>
+                    <option value="Green">Green</option>
+                    <option value="Red">Red</option>
+                    <option value="Reembolso">Reembolso</option>
+                    <option value="Pendente">Pendente</option>
+                  </select>
+                </div>
+                <div class="form-group full-width">
+                  <label for="descricao">Descrição (Opcional)</label>
+                  <input type="text" id="descricao" placeholder="Anotações sobre a aposta">
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Salvar Entrada</button>
+              </div>
+            </form>
+            </div>
+          </div>
+
+          <div class="card list-card">
+            <div class="card-header">
+              <h3>Entradas de Hoje & Pendentes</h3>
+            </div>
+            <div class="table-responsive">
+              <table id="entradasDiaTable">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Liga</th>
+                    <th>Jogo</th>
+                    <th>Mercado</th>
+                    <th>Linha</th>
+                    <th>Resultado</th>
+                    <th>Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: Dashboard -->
+        <section id="dashboard" class="view">
+          <div class="header-section">
+            <h2>Balanço de Métodos</h2>
+            <p>Análise de desempenho das suas entradas.</p>
+          </div>
+
+          <!-- KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon"><i class="fa-solid fa-hashtag"></i></div>
+              <div class="kpi-content">
+                <p class="kpi-label">Total Entradas</p>
+                <h3 class="kpi-value" id="kpiTotal">0</h3>
+              </div>
+            </div>
+            <div class="kpi-card green">
+              <div class="kpi-icon"><i class="fa-solid fa-check"></i></div>
+              <div class="kpi-content">
+                <p class="kpi-label">Greens</p>
+                <h3 class="kpi-value" id="kpiGreen">0</h3>
+              </div>
+            </div>
+            <div class="kpi-card red">
+              <div class="kpi-icon"><i class="fa-solid fa-xmark"></i></div>
+              <div class="kpi-content">
+                <p class="kpi-label">Reds</p>
+                <h3 class="kpi-value" id="kpiRed">0</h3>
+              </div>
+            </div>
+            <div class="kpi-card highlight">
+              <div class="kpi-icon"><i class="fa-solid fa-percent"></i></div>
+              <div class="kpi-content">
+                <p class="kpi-label">Win Rate</p>
+                <h3 class="kpi-value" id="kpiWinRate">0%</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="charts-grid">
+            <div class="card chart-card">
+              <h3>Desempenho por Liga</h3>
+              <div class="chart-container">
+                <canvas id="ligaChart"></canvas>
+              </div>
+            </div>
+            <div class="card chart-card">
+              <h3>Desempenho por Mercado</h3>
+              <div class="chart-container">
+                <canvas id="mercadoChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: Histórico Geral -->
+        <section id="historico" class="view">
+          <div class="header-section">
+            <h2>Histórico Geral</h2>
+            <p>Lista completa de todas as suas entradas anteriores.</p>
+          </div>
+          
+          <div class="card list-card">
+            <div class="card-header">
+              <h3>Todas as Entradas</h3>
+            </div>
+            <div class="table-responsive">
+              <table id="historicoTable">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Liga</th>
+                    <th>Jogo</th>
+                    <th>Mercado</th>
+                    <th>Linha</th>
+                    <th>Resultado</th>
+                    <th>Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- View: Análise -->
+        <section id="analise" class="view">
+          <div class="header-section">
+            <h2>Análise de Pré-Jogo</h2>
+            <p>Adicione os dados dos últimos 5 jogos para comparar as equipes.</p>
+          </div>
+
+          <div class="analysis-container">
+            <div class="teams-input-card card">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Time de Casa (Time 1)</label>
+                  <input type="text" id="timeCasaAnalise" placeholder="">
+                </div>
+                <div class="form-group">
+                  <label>Time Visitante (Time 2)</label>
+                  <input type="text" id="timeForaAnalise" placeholder="">
+                </div>
+              </div>
+            </div>
+
+            <div class="collapsible-card card" id="analysisGamesCollapsible">
+              <div class="collapsible-header">
+                <div class="header-title-group">
+                  <i class="fas fa-database"></i>
+                  <h3>DADOS DOS ÚLTIMOS JOGOS</h3>
+                </div>
+                <i class="fas fa-chevron-down arrow"></i>
+              </div>
+              
+              <div class="collapsible-content">
+                <div class="analysis-grid">
+                  <!-- Time Casa -->
+                  <div class="team-analysis-col">
+                    <h3 id="displayTimeCasa">Time Casa</h3>
+                    <div class="last-games-list" id="listaJogosCasa">
+                      <!-- Populated via JS -->
+                    </div>
+                  </div>
+
+                  <!-- Time Fora -->
+                  <div class="team-analysis-col">
+                    <h3 id="displayTimeFora">Time Visitante</h3>
+                    <div class="last-games-list" id="listaJogosFora">
+                      <!-- Populated via JS -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- New CornerPro-Style Prediction Analysis Section -->
+            <div class="prediction-card card" id="predictionSection">
+              <div class="prediction-tabs-bar">
+                <button class="analysis-tab active" data-tab="global">Análise Global</button>
+                <button class="analysis-tab" data-tab="golos">Golos</button>
+                <button class="analysis-tab" data-tab="cantos">Cantos</button>
+                <button class="analysis-tab" data-tab="cartoes">Cartões</button>
+                <button class="analysis-tab" data-tab="finalizacoes">Finalizações</button>
+                <button class="analysis-tab" data-tab="faltas">Faltas</button>
+                <button class="analysis-tab" data-tab="impedimentos">Impedimentos</button>
+              </div>
+
+              <div id="predictionOutput">
+                <!-- Content will be rendered here via JS -->
+                <div class="prediction-empty-state">
+                  <i class="fas fa-calculator"></i>
+                  <p>Aguardando dados dos últimos 5 jogos para processar estatísticas...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
