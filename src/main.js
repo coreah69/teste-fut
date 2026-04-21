@@ -104,19 +104,25 @@ let mercadoChartInstance = null;
 
 // Initialize the app
 async function init() {
-  setupNavigation();
-  populateSelects();
-  setupEventListeners();
-  setupCollapsibles();
-  setupPredictionTabs();
-  await loadData();
-  
-  // Load saved view or default to dashboard
-  const savedView = localStorage.getItem('futAnalyze_activeView') || 'dashboard';
-  showView(savedView);
-  
-  if (savedView === 'analise') {
-    renderPredictionAnalysis();
+  console.log('Iniciando FutAnalyze...');
+  try {
+    setupNavigation();
+    populateSelects();
+    setupEventListeners();
+    setupCollapsibles();
+    setupPredictionTabs();
+    await loadData();
+    
+    // Load saved view or default to dashboard
+    const savedView = localStorage.getItem('futAnalyze_activeView') || 'dashboard';
+    showView(savedView);
+    
+    if (savedView === 'analise') {
+      renderPredictionAnalysis();
+    }
+    console.log('FutAnalyze iniciado com sucesso!');
+  } catch (error) {
+    console.error('Erro crítico na inicialização:', error);
   }
 }
 
@@ -273,21 +279,32 @@ function setupEventListeners() {
 
 // Data Management
 async function loadData() {
-  if (entradasDiaTableBody) entradasDiaTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Carregando dados...</td></tr>';
-  if (historicoTableBody) historicoTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Carregando dados...</td></tr>';
-  
-  const { data, error } = await supabase
-    .from('entradas')
-    .select('*')
-    .order('data', { ascending: false });
+  console.log('Carregando dados do Supabase...');
+  try {
+    if (entradasDiaTableBody) entradasDiaTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Carregando dados...</td></tr>';
+    if (historicoTableBody) historicoTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Carregando dados...</td></tr>';
+    
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('Configuração do Supabase ausente');
+    }
 
-  if (error) {
-    if(entradasDiaTableBody) entradasDiaTableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--red);">Erro ao carregar dados: ${error.message}</td></tr>`;
-    if(historicoTableBody) historicoTableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--red);">Erro ao carregar dados: ${error.message}</td></tr>`;
-  } else {
-    entradas = data || [];
-    renderTables();
-    updateDashboard();
+    const { data, error } = await supabase
+      .from('entradas')
+      .select('*')
+      .order('data', { ascending: false });
+
+    if (error) {
+      throw error;
+    } else {
+      entradas = data || [];
+      renderTables();
+      updateDashboard();
+      console.log('Dados carregados:', entradas.length, 'entradas found');
+    }
+  } catch (error) {
+    console.error('Erro ao carregar dados:', error);
+    if(entradasDiaTableBody) entradasDiaTableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--red);">Falha na conexão: ${error.message}</td></tr>`;
+    if(historicoTableBody) historicoTableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--red);">Falha na conexão: ${error.message}</td></tr>`;
   }
 }
 
